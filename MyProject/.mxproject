@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=C:/Users/16485/Desktop/MyProject/Inc
+HeaderPath=D:/比赛程序/2020RobotWork/2020Robotwork/MyProject/Inc
 HeaderFiles=gpio.h;stm32f4xx_it.h;stm32f4xx_hal_conf.h;main.h;
-SourcePath=C:/Users/16485/Desktop/MyProject/Src
+SourcePath=D:/比赛程序/2020RobotWork/2020Robotwork/MyProject/Src
 SourceFiles=gpio.c;stm32f4xx_it.c;stm32f4xx_hal_msp.c;main.c;
 
 [PreviousLibFiles]

@@ -2,7 +2,7 @@ myproject\system_stm32f4xx.o: ../Src/system_stm32f4xx.c
 myproject\system_stm32f4xx.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 myproject\system_stm32f4xx.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h
 myproject\system_stm32f4xx.o: ../Drivers/CMSIS/Include/core_cm4.h
-myproject\system_stm32f4xx.o: D:\STM32\单片机\STM32学习\MDK527\ARM\ARMCC\Bin\..\include\stdint.h
+myproject\system_stm32f4xx.o: D:\STM32\MDK527\ARM\ARMCC\Bin\..\include\stdint.h
 myproject\system_stm32f4xx.o: ../Drivers/CMSIS/Include/cmsis_version.h
 myproject\system_stm32f4xx.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 myproject\system_stm32f4xx.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
@@ -14,7 +14,7 @@ myproject\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_
 myproject\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
 myproject\system_stm32f4xx.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 myproject\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-myproject\system_stm32f4xx.o: D:\STM32\单片机\STM32学习\MDK527\ARM\ARMCC\Bin\..\include\stddef.h
+myproject\system_stm32f4xx.o: D:\STM32\MDK527\ARM\ARMCC\Bin\..\include\stddef.h
 myproject\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 myproject\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h
 myproject\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
