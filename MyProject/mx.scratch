@@ -32,7 +32,7 @@
     <cpuclock>168</cpuclock>
     <board>custom</board>
 
-    <debugprobe>jtag</debugprobe>
+    <debugprobe>swd</debugprobe>
     <optimization></optimization>
     <icfloc></icfloc>
 
@@ -90,6 +90,11 @@
         <name>Drivers</name> 
         <group>
             <name>STM32F4xx_HAL_Driver</name>
+            <file>
+                <name>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c</name>
+
+
+                </file>
             <file>
                 <name>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c</name>
 
@@ -188,6 +193,9 @@
                     </file>
                 <file>
                     <name>..\Src\gpio.c</name>
+                    </file>
+                <file>
+                    <name>..\Src\spi.c</name>
                     </file>
                 <file>
                     <name>..\Src\usart.c</name>

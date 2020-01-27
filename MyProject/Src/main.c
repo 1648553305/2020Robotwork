@@ -20,12 +20,13 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "spi.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "w25qxx.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,6 +59,9 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 uint8_t RxCounter=0,RxBuffer1[50]={0},RxYemp1=0,F_Usart=0;
+// const uint8_t TEXT_Buffer[]={"Explorer STM32F4 SPI TEST"};
+const uint8_t TEXT_Buffer[]={"OKOKOKOKOKOKOKOKOKOKOKOKO"};
+#define SIZE sizeof(TEXT_Buffer)
 /* USER CODE END 0 */
 
 /**
@@ -67,7 +71,6 @@ uint8_t RxCounter=0,RxBuffer1[50]={0},RxYemp1=0,F_Usart=0;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
   
 
@@ -90,9 +93,9 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
-	HAL_UART_Receive_IT(&huart1, (uint8_t *)RxBuffer1, 4);
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-
+	uint32_t FLASH_SIZE; 
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -100,7 +103,19 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		
+		W25QXX_Init();				    //W25QXX初始化
+		while(W25QXX_ReadID()!=W25Q128)								//检测不到W25Q256
+			{
+				HAL_UART_Transmit(&huart1, "FAILT/r/n", 9, 50);
+				HAL_Delay(30);
+			}
+		FLASH_SIZE=16*1024*1024;	//FLASH 大小为16M字节
+		W25QXX_Write((uint8_t*)TEXT_Buffer,FLASH_SIZE-100,SIZE);		//从倒数第100个地址处开始,写入SIZE长度的数据
+		while(1)								//检测不到W25Q256
+			{
+				HAL_UART_Transmit(&huart1, "OK/r/n", 6, 50);
+				HAL_Delay(30);
+			}
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
