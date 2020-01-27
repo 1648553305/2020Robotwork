@@ -20,6 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -56,7 +57,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint8_t RxCounter=0,RxBuffer1[50]={0},RxYemp1=0,F_Usart=0;
 /* USER CODE END 0 */
 
 /**
@@ -88,6 +89,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_USART1_UART_Init();
+	HAL_UART_Receive_IT(&huart1, (uint8_t *)RxBuffer1, 4);
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -97,7 +100,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+		
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -146,12 +149,41 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+// GPIO中断处理函数
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	{
-		if(GPIO_Pin==GPIO_PIN_2) 
-			HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_RESET);
-		if(GPIO_Pin==GPIO_PIN_4) 
-			HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_SET);
+		if(GPIO_Pin==GPIO_PIN_2) // 2号中断线 按键共地检测下降沿
+			{
+				HAL_Delay(5);
+				if(!HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_2))
+				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_RESET);
+			}
+		if(GPIO_Pin==GPIO_PIN_3) // 3号中断线 按键共地检测下降沿
+			{
+				HAL_Delay(5);
+				if(!HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_3))
+				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_SET);
+			}
+		if(GPIO_Pin==GPIO_PIN_4) // 4号中断线 按键共地检测下降沿
+			{
+				HAL_Delay(10);
+				if(!HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_4))
+					{
+						HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9);
+						while(!HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_4));
+					}
+				}
+			// 按键中断设置函数
+	}
+// 串口中断
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+	{
+		if(huart->Instance == USART1)
+			{
+				HAL_UART_Transmit(&huart1, RxBuffer1, 4, 50);
+				HAL_UART_Receive_IT(&huart1,RxBuffer1,4);
+				HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9);
+			}
 	}
 /* USER CODE END 4 */
 
