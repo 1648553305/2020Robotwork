@@ -59,8 +59,12 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 uint8_t RxCounter=0,RxBuffer1[50]={0},RxYemp1=0,F_Usart=0;
-// const uint8_t TEXT_Buffer[]={"Explorer STM32F4 SPI TEST"};
-const uint8_t TEXT_Buffer[]={"OKOKOKOKOKOKOKOKOKOKOKOKO"};
+float get;
+char getchar; 
+uint32_t getu32;
+int getint;
+const uint8_t TEXT_Buffer[]={"Handsome Chen\r\n"};
+uint8_t TEXT_Buffer1[2]={12,13};
 #define SIZE sizeof(TEXT_Buffer)
 /* USER CODE END 0 */
 
@@ -71,6 +75,9 @@ const uint8_t TEXT_Buffer[]={"OKOKOKOKOKOKOKOKOKOKOKOKO"};
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+	uint32_t FLASH_SIZE; 
+	uint8_t datatemp[25];
+	//float test=3.545454;
   /* USER CODE END 1 */
   
 
@@ -78,9 +85,9 @@ int main(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
+	
   /* USER CODE BEGIN Init */
-
+	
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -95,27 +102,42 @@ int main(void)
   MX_USART1_UART_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-	uint32_t FLASH_SIZE; 
+	W25QXX_Init();				    //W25QXX初始化
+	FLASH_SIZE=16*1024*1024;	//FLASH 大小为16M字节
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-		W25QXX_Init();				    //W25QXX初始化
-		while(W25QXX_ReadID()!=W25Q128)								//检测不到W25Q256
+		while(W25QXX_ReadID()!=W25Q128)								//检测不到W25Q128
 			{
-				HAL_UART_Transmit(&huart1, "FAILT/r/n", 9, 50);
+				HAL_UART_Transmit(&huart1, "Read Data Failt/r/n", 19, 50);
 				HAL_Delay(30);
-			}
-		FLASH_SIZE=16*1024*1024;	//FLASH 大小为16M字节
-		W25QXX_Write((uint8_t*)TEXT_Buffer,FLASH_SIZE-100,SIZE);		//从倒数第100个地址处开始,写入SIZE长度的数据
-		while(1)								//检测不到W25Q256
+			}			
+//		W25QXX_AllData_Initial();
+//		W25QXX_Put_u8Data(12);
+//		W25QXX_Put_u8Data(123);
+//		W25QXX_Put_u16Data(1234);
+//		W25QXX_Put_u16Data(12345);
+//		W25QXX_Put_u32Data(123456);
+//		W25QXX_Put_u32Data(1234567);
+//		W25QXX_Put_intData(12345678);
+//		W25QXX_Put_intData(12345678);
+//		W25QXX_Put_floatData(1.234567);
+//		W25QXX_Put_floatData(12.34567);
+//		W25QXX_Put_doubleData(12.3456);
+//		W25QXX_Put_doubleData(123.456);
+//		W25QXX_Put_charData(110);
+//		W25QXX_Put_charData(110);
+		W25QXX_Data_Fixchar(2,0);
+		getchar = W25QXX_Data_charRead(2);
+		while(1)
 			{
-				HAL_UART_Transmit(&huart1, "OK/r/n", 6, 50);
-				HAL_Delay(30);
+				HAL_UART_Transmit(&huart1, TEXT_Buffer1, 4, 50);
+				HAL_Delay(900);
 			}
+    /* USER CODE END WHILE */			
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -179,15 +201,15 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 				if(!HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_3))
 				HAL_GPIO_WritePin(GPIOF, GPIO_PIN_9, GPIO_PIN_SET);
 			}
-		if(GPIO_Pin==GPIO_PIN_4) // 4号中断线 按键共地检测下降沿
-			{
-				HAL_Delay(10);
-				if(!HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_4))
-					{
-						HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9);
-						while(!HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_4));
-					}
-				}
+//		if(GPIO_Pin==GPIO_PIN_4) // 4号中断线 按键共地检测下降沿
+//			{
+//				HAL_Delay(10);
+//				if(!HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_4))
+//					{
+//						HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_9);
+//						while(!HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_4));
+//					}
+//				}
 			// 按键中断设置函数
 	}
 // 串口中断

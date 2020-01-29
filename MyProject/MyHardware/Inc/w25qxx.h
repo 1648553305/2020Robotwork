@@ -1,18 +1,6 @@
 #ifndef __W25QXX_H
 #define __W25QXX_H
 #include "usart.h"
-//////////////////////////////////////////////////////////////////////////////////	 
-//本程序只供学习使用，未经作者许可，不得用于其它任何用途
-//ALIENTEK STM32F407开发板
-//W25QXX驱动代码	   
-//正点原子@ALIENTEK
-//技术论坛:www.openedv.com
-//创建日期:2014/4/13
-//版本：V1.0
-//版权所有，盗版必究。
-//Copyright(C) 广州市星翼电子科技有限公司 2014-2024
-//All rights reserved									  
-////////////////////////////////////////////////////////////////////////////////// 	
 
 //W25X系列/Q系列芯片列表	   
 //W25Q80  ID  0XEF13
@@ -73,4 +61,27 @@ void W25QXX_Wait_Busy(void);           	//等待空闲
 void W25QXX_PowerDown(void);        	//进入掉电模式
 void W25QXX_WAKEUP(void);				//唤醒
 void W25QXX_Write_Page(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite);
+void W25QXX_Put_u8Data(uint8_t Data);  // 写u8型数据到flash中
+void W25QXX_Put_u16Data(uint16_t Data);  // 写u16型数据到flash中
+void W25QXX_Put_u32Data(uint32_t Data);  // 写u32型数据到flash中
+void W25QXX_Put_intData(int Data);  // 写int型数据到flash中
+void W25QXX_Put_floatData(float Data);  // 写float型数据到flash中
+void W25QXX_Put_doubleData(double Data);  // 写double型数据到flash中
+void W25QXX_Put_charData(char Data);  // 写char型数据到flash中
+void W25QXX_Write_Dictionary(uint8_t); // 写索引文件（一般用不到）
+void W25QXX_AllData_Initial(void); // 重置所有数据
+uint8_t W25QXX_Data_u8Read(uint32_t location); // 读取u8数据
+uint16_t W25QXX_Data_u16Read(uint32_t location); // 读取u16数据
+uint32_t W25QXX_Data_u32Read(uint32_t location); // 读取u32数据
+int W25QXX_Data_intRead(uint32_t location); // 读取int数据
+float W25QXX_Data_floatRead(uint32_t location); // 读取float数据
+double W25QXX_Data_doubleRead(uint32_t location); // 读取double数据
+char W25QXX_Data_charRead(uint32_t location);// 读取char数据
+void W25QXX_Data_Fixu8(uint32_t location,uint8_t Data); // 修改u8数据
+void W25QXX_Data_Fixu16(uint32_t location,uint16_t Data); // 修改u16数据
+void W25QXX_Data_Fixu32(uint32_t location,uint32_t Data); // 修改u32数据
+void W25QXX_Data_Fixint(uint32_t location,int Data); // 修改int数据
+void W25QXX_Data_Fixfloat(uint32_t location,float Data); // 修改float数据
+void W25QXX_Data_Fixdlobule(uint32_t location,double Data); // 修改double数据
+void W25QXX_Data_Fixchar(uint32_t location,char Data); // 修改char数据
 #endif

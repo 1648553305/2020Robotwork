@@ -2,21 +2,44 @@
 #include "spi.h"
 #include "usart.h"
 #include "stm32f4xx_hal_gpio.h"
-//////////////////////////////////////////////////////////////////////////////////	 
-//本程序只供学习使用，未经作者许可，不得用于其它任何用途
-//ALIENTEK STM32F407开发板
-//W25QXX驱动代码	   
-//正点原子@ALIENTEK
-//技术论坛:www.openedv.com
-//创建日期:2017/4/13
-//版本：V1.0
-//版权所有，盗版必究。
-//Copyright(C) 广州市星翼电子科技有限公司 2014-2024
-//All rights reserved									  
-////////////////////////////////////////////////////////////////////////////////// 	
+
+#define Typeu8 0
+#define Typeu16 1
+#define Typeu32 2
+#define Typeint 3
+#define Typefloat 4
+#define Typedouble 5
+#define Typechar 6
+
+#define u8StartDress 4096 
+#define u16StartDress 65537 
+#define u32StartDress 131074 
+#define intStartDress 196611 
+#define floatStartDress 262148 
+#define doubleStartDress 327685 
+#define charStartDress 393222
+
+#define u8EndDress 4095 
+#define u16EndDress 65536
+#define u32EndDress 196610
+#define intEndDress 262147 
+#define floatEndDress 327684 
+#define doubleEndDress 393221 
+#define charEndDress 458758
 
 uint16_t W25QXX_TYPE=W25Q128;	//默认是W25Q128
 
+/*该存储器一个存储7种数据类型 u8 u16 u32 int float double char
+存储时把数据按顺序存在指定的区域内规定如下：
+0-4095为数据位置存储区域
+4096-65536字节为u8存储区域 可以存61440个变量
+65537-131073字节为u16储存区可以存32768个变量
+131074-196610字节为u32储存区可以存16384个变量
+196611-262147字节为int存储区可以存16384个变量
+262148-327684字节为float存储区可以存16384个变量
+327685-393221字节为double存储区可以存8192个变量
+393222-458758字节为char存储区可以存65536个变量
+*/
 //4Kbytes为一个Sector
 //16个扇区为1个Block
 //W25Q256
@@ -319,3 +342,503 @@ void W25QXX_WAKEUP(void)
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET);                                 //取消片选     	      
     HAL_Delay(1);                                //等待TRES1
 }   
+//定义我的数据存储格式
+void W25QXX_Put_u8Data(uint8_t Data)
+{
+	uint8_t Dict[4];
+	uint32_t WriteAddr;
+	uint16_t NumByteToWrite=1;
+	uint8_t pBuffer[1]={0};
+	W25QXX_Read(Dict,0,4);
+	((uint8_t *)&WriteAddr)[0]=Dict[0];
+	((uint8_t *)&WriteAddr)[1]=Dict[1];
+	((uint8_t *)&WriteAddr)[2]=Dict[2];
+	((uint8_t *)&WriteAddr)[3]=Dict[3];	
+	if(WriteAddr<61440){
+		WriteAddr+=u8StartDress;
+		W25QXX_Write_Dictionary(Typeu8);
+		pBuffer[0] = ((uint8_t *)&Data)[0];
+		W25QXX_Write(pBuffer,WriteAddr,NumByteToWrite);	
+	}
+}
+void W25QXX_Put_u16Data(uint16_t Data)
+{
+	uint8_t Dict[4];
+	uint32_t WriteAddr;
+	uint16_t NumByteToWrite=2;
+	uint8_t pBuffer[2]={0};
+	W25QXX_Read(Dict,4,4);
+	((uint8_t *)&WriteAddr)[0]=Dict[0];
+	((uint8_t *)&WriteAddr)[1]=Dict[1];
+	((uint8_t *)&WriteAddr)[2]=Dict[2];
+	((uint8_t *)&WriteAddr)[3]=Dict[3];	
+	if(WriteAddr<32768){
+		WriteAddr =u16StartDress+WriteAddr*2;
+		W25QXX_Write_Dictionary(Typeu16);
+		pBuffer[0] = ((uint8_t *)&Data)[0];
+		pBuffer[1] = ((uint8_t *)&Data)[1];
+		W25QXX_Write(pBuffer,WriteAddr,NumByteToWrite);	
+	}
+}
+
+void W25QXX_Put_u32Data(uint32_t Data)
+{
+	uint8_t Dict[4];
+	uint32_t WriteAddr;
+	uint16_t NumByteToWrite=4;
+	uint8_t pBuffer[4]={0};
+	W25QXX_Read(Dict,8,4);
+	((uint8_t *)&WriteAddr)[0]=Dict[0];
+	((uint8_t *)&WriteAddr)[1]=Dict[1];
+	((uint8_t *)&WriteAddr)[2]=Dict[2];
+	((uint8_t *)&WriteAddr)[3]=Dict[3];	
+	if(WriteAddr<16384)
+		{
+			WriteAddr =u32StartDress+WriteAddr*4;
+			W25QXX_Write_Dictionary(Typeu32);
+			pBuffer[0] = ((uint8_t *)&Data)[0];
+			pBuffer[1] = ((uint8_t *)&Data)[1];
+			pBuffer[2] = ((uint8_t *)&Data)[2];
+			pBuffer[3] = ((uint8_t *)&Data)[3];
+			W25QXX_Write(pBuffer,WriteAddr,NumByteToWrite);	
+		}
+}
+
+void W25QXX_Put_intData(int Data)
+{
+	uint8_t Dict[4];
+	uint32_t WriteAddr;
+	uint16_t NumByteToWrite=4;
+	uint8_t pBuffer[4]={0};
+	W25QXX_Read(Dict,12,4);
+	((uint8_t *)&WriteAddr)[0]=Dict[0];
+	((uint8_t *)&WriteAddr)[1]=Dict[1];
+	((uint8_t *)&WriteAddr)[2]=Dict[2];
+	((uint8_t *)&WriteAddr)[3]=Dict[3];	
+	if(WriteAddr<16384)
+		{
+			WriteAddr =intStartDress+WriteAddr*4;
+			W25QXX_Write_Dictionary(Typeint);
+			pBuffer[0] = ((uint8_t *)&Data)[0];
+			pBuffer[1] = ((uint8_t *)&Data)[1];
+			pBuffer[2] = ((uint8_t *)&Data)[2];
+			pBuffer[3] = ((uint8_t *)&Data)[3];
+			W25QXX_Write(pBuffer,WriteAddr,NumByteToWrite);	
+		}
+}
+
+void W25QXX_Put_floatData(float Data)
+{
+	uint8_t Dict[4];
+	uint32_t WriteAddr;
+	uint16_t NumByteToWrite=4;
+	uint8_t pBuffer[4]={0};
+	W25QXX_Read(Dict,16,4);
+	((uint8_t *)&WriteAddr)[0]=Dict[0];
+	((uint8_t *)&WriteAddr)[1]=Dict[1];
+	((uint8_t *)&WriteAddr)[2]=Dict[2];
+	((uint8_t *)&WriteAddr)[3]=Dict[3];	
+	if(WriteAddr<16384)
+		{
+			WriteAddr =floatStartDress+WriteAddr*4;
+			W25QXX_Write_Dictionary(Typefloat);
+			pBuffer[0] = ((uint8_t *)&Data)[0];
+			pBuffer[1] = ((uint8_t *)&Data)[1];
+			pBuffer[2] = ((uint8_t *)&Data)[2];
+			pBuffer[3] = ((uint8_t *)&Data)[3];
+			W25QXX_Write(pBuffer,WriteAddr,NumByteToWrite);	
+		}
+}
+
+void W25QXX_Put_doubleData(double Data)
+{
+	uint8_t Dict[4];
+	uint32_t WriteAddr=0;
+	uint16_t NumByteToWrite=8;
+	uint8_t pBuffer[8]={0};
+	W25QXX_Read(Dict,20,4);
+	((uint8_t *)&WriteAddr)[0]=Dict[0];
+	((uint8_t *)&WriteAddr)[1]=Dict[1];
+	((uint8_t *)&WriteAddr)[2]=Dict[2];
+	((uint8_t *)&WriteAddr)[3]=Dict[3];	
+	if(WriteAddr<8192)
+		{
+			WriteAddr =doubleStartDress+WriteAddr*8;
+			W25QXX_Write_Dictionary(Typedouble);
+			pBuffer[0] = ((uint8_t *)&Data)[0];
+			pBuffer[1] = ((uint8_t *)&Data)[1];
+			pBuffer[2] = ((uint8_t *)&Data)[2];
+			pBuffer[3] = ((uint8_t *)&Data)[3];
+			pBuffer[4] = ((uint8_t *)&Data)[4];
+			pBuffer[5] = ((uint8_t *)&Data)[5];
+			pBuffer[6] = ((uint8_t *)&Data)[6];
+			pBuffer[7] = ((uint8_t *)&Data)[7];
+			W25QXX_Write(pBuffer,WriteAddr,NumByteToWrite);	
+		}
+}
+
+void W25QXX_Put_charData(char Data)
+{
+	uint8_t Dict[4];
+	uint32_t WriteAddr=0;
+	uint16_t NumByteToWrite=1;
+	uint8_t pBuffer[1]={0};
+	W25QXX_Read(Dict,24,4);
+	((uint8_t *)&WriteAddr)[0]=Dict[0];
+	((uint8_t *)&WriteAddr)[1]=Dict[1];
+	((uint8_t *)&WriteAddr)[2]=Dict[2];
+	((uint8_t *)&WriteAddr)[3]=Dict[3];	
+	if(WriteAddr<32768)
+		{
+			WriteAddr+=charStartDress;
+			W25QXX_Write_Dictionary(Typechar);
+			pBuffer[0] = ((uint8_t *)&Data)[0];
+			W25QXX_Write(pBuffer,WriteAddr,NumByteToWrite);	
+		}
+}
+
+void W25QXX_Write_Dictionary(uint8_t type)
+{
+	uint8_t Dict[4];
+	uint32_t count;
+	switch(type)
+		{
+			case Typeu8:
+							W25QXX_Read(Dict,0,4);
+							((uint8_t *)&count)[0]=Dict[0];
+							((uint8_t *)&count)[1]=Dict[1];
+							((uint8_t *)&count)[2]=Dict[2];
+							((uint8_t *)&count)[3]=Dict[3];							
+							count++;
+							Dict[0] = ((uint8_t *)&count)[0];
+							Dict[1] = ((uint8_t *)&count)[1];
+							Dict[2] = ((uint8_t *)&count)[2];
+							Dict[3] = ((uint8_t *)&count)[3];
+							W25QXX_Write(Dict,0,4);	
+							break;
+			case Typeu16:
+							W25QXX_Read(Dict,4,4);
+							((uint8_t *)&count)[0]=Dict[0];
+							((uint8_t *)&count)[1]=Dict[1];
+							((uint8_t *)&count)[2]=Dict[2];
+							((uint8_t *)&count)[3]=Dict[3];							
+							count++;
+							Dict[0] = ((uint8_t *)&count)[0];
+							Dict[1] = ((uint8_t *)&count)[1];
+							Dict[2] = ((uint8_t *)&count)[2];
+							Dict[3] = ((uint8_t *)&count)[3];
+							W25QXX_Write(Dict,4,4);	
+							break;
+			case Typeu32:
+							W25QXX_Read(Dict,8,4);
+							((uint8_t *)&count)[0]=Dict[0];
+							((uint8_t *)&count)[1]=Dict[1];
+							((uint8_t *)&count)[2]=Dict[2];
+							((uint8_t *)&count)[3]=Dict[3];							
+							count++;
+							Dict[0] = ((uint8_t *)&count)[0];
+							Dict[1] = ((uint8_t *)&count)[1];
+							Dict[2] = ((uint8_t *)&count)[2];
+							Dict[3] = ((uint8_t *)&count)[3];
+							W25QXX_Write(Dict,8,4);	
+							break;
+			case Typeint:
+							W25QXX_Read(Dict,12,4);
+							((uint8_t *)&count)[0]=Dict[0];
+							((uint8_t *)&count)[1]=Dict[1];
+							((uint8_t *)&count)[2]=Dict[2];
+							((uint8_t *)&count)[3]=Dict[3];							
+							count++;
+							Dict[0] = ((uint8_t *)&count)[0];
+							Dict[1] = ((uint8_t *)&count)[1];
+							Dict[2] = ((uint8_t *)&count)[2];
+							Dict[3] = ((uint8_t *)&count)[3];
+							W25QXX_Write(Dict,12,4);	
+							break;
+			case Typefloat:
+							W25QXX_Read(Dict,16,4);
+							((uint8_t *)&count)[0]=Dict[0];
+							((uint8_t *)&count)[1]=Dict[1];
+							((uint8_t *)&count)[2]=Dict[2];
+							((uint8_t *)&count)[3]=Dict[3];							
+							count++;
+							Dict[0] = ((uint8_t *)&count)[0];
+							Dict[1] = ((uint8_t *)&count)[1];
+							Dict[2] = ((uint8_t *)&count)[2];
+							Dict[3] = ((uint8_t *)&count)[3];
+							W25QXX_Write(Dict,16,4);	
+							break;
+			case Typedouble:
+							W25QXX_Read(Dict,20,4);
+							((uint8_t *)&count)[0]=Dict[0];
+							((uint8_t *)&count)[1]=Dict[1];
+							((uint8_t *)&count)[2]=Dict[2];
+							((uint8_t *)&count)[3]=Dict[3];							
+							count++;
+							Dict[0] = ((uint8_t *)&count)[0];
+							Dict[1] = ((uint8_t *)&count)[1];
+							Dict[2] = ((uint8_t *)&count)[2];
+							Dict[3] = ((uint8_t *)&count)[3];
+							W25QXX_Write(Dict,20,4);	
+							break;
+			case Typechar:
+							W25QXX_Read(Dict,24,4);
+							((uint8_t *)&count)[0]=Dict[0];
+							((uint8_t *)&count)[1]=Dict[1];
+							((uint8_t *)&count)[2]=Dict[2];
+							((uint8_t *)&count)[3]=Dict[3];							
+							count++;
+							Dict[0] = ((uint8_t *)&count)[0];
+							Dict[1] = ((uint8_t *)&count)[1];
+							Dict[2] = ((uint8_t *)&count)[2];
+							Dict[3] = ((uint8_t *)&count)[3];
+							W25QXX_Write(Dict,24,4);	
+							break;
+		}
+}
+
+void W25QXX_AllData_Initial(void)
+{
+	uint8_t Dict[4];
+	uint32_t InitialDress=0;
+	Dict[0] = ((uint8_t *)&InitialDress)[0];
+	Dict[1] = ((uint8_t *)&InitialDress)[1];
+	Dict[2] = ((uint8_t *)&InitialDress)[2];
+	Dict[3] = ((uint8_t *)&InitialDress)[3];
+	W25QXX_Write(Dict,0,4);	
+	W25QXX_Write(Dict,4,4);	
+	W25QXX_Write(Dict,8,4);	
+	W25QXX_Write(Dict,12,4);
+	W25QXX_Write(Dict,16,4);
+	W25QXX_Write(Dict,20,4);
+	W25QXX_Write(Dict,24,4);	
+}
+
+uint8_t W25QXX_Data_u8Read(uint32_t location)
+{
+	uint8_t Dict[4],num;
+	uint32_t tem;
+	W25QXX_Read(Dict,0,4);
+	((uint8_t *)&tem)[0]=Dict[0];
+	((uint8_t *)&tem)[1]=Dict[1];
+	((uint8_t *)&tem)[2]=Dict[2];
+	((uint8_t *)&tem)[3]=Dict[3];		
+	if(location<tem)
+		{
+			W25QXX_Read(Dict,u8StartDress+location,1);
+			((uint8_t *)&num)[0]=Dict[0];
+		}
+		return num;
+}
+
+uint16_t W25QXX_Data_u16Read(uint32_t location)
+{
+	uint8_t Dict[4];
+	uint16_t num;
+	uint32_t tem;
+	W25QXX_Read(Dict,4,4);
+	((uint8_t *)&tem)[0]=Dict[0];
+	((uint8_t *)&tem)[1]=Dict[1];
+	((uint8_t *)&tem)[2]=Dict[2];
+	((uint8_t *)&tem)[3]=Dict[3];		
+	if(location<tem)
+		{
+			W25QXX_Read(Dict,u16StartDress+location*2,2);
+			((uint8_t *)&num)[0]=Dict[0];
+			((uint8_t *)&num)[1]=Dict[1];
+		}
+		return num;
+}
+
+uint32_t W25QXX_Data_u32Read(uint32_t location)
+{
+	uint8_t Dict[4];
+	uint32_t num;
+	uint32_t tem;
+	W25QXX_Read(Dict,8,4);
+	((uint8_t *)&tem)[0]=Dict[0];
+	((uint8_t *)&tem)[1]=Dict[1];
+	((uint8_t *)&tem)[2]=Dict[2];
+	((uint8_t *)&tem)[3]=Dict[3];		
+	if(location<tem)
+		{
+			W25QXX_Read(Dict,u32StartDress+location*4,4);
+			((uint8_t *)&num)[0]=Dict[0];
+			((uint8_t *)&num)[1]=Dict[1];
+			((uint8_t *)&num)[2]=Dict[2];
+			((uint8_t *)&num)[3]=Dict[3];
+		}
+		return num;
+}
+
+int W25QXX_Data_intRead(uint32_t location)
+{
+	uint8_t Dict[4];
+	int num;
+	uint32_t tem;
+	W25QXX_Read(Dict,12,4);
+	((uint8_t *)&tem)[0]=Dict[0];
+	((uint8_t *)&tem)[1]=Dict[1];
+	((uint8_t *)&tem)[2]=Dict[2];
+	((uint8_t *)&tem)[3]=Dict[3];		
+	if(location<tem)
+		{
+			W25QXX_Read(Dict,intStartDress+location*4,4);
+			((uint8_t *)&num)[0]=Dict[0];
+			((uint8_t *)&num)[1]=Dict[1];
+			((uint8_t *)&num)[2]=Dict[2];
+			((uint8_t *)&num)[3]=Dict[3];
+		}
+		return num;
+}
+
+float W25QXX_Data_floatRead(uint32_t location)
+{
+	uint8_t Dict[4];
+	float num;
+	uint32_t tem;
+	W25QXX_Read(Dict,16,4);
+	((uint8_t *)&tem)[0]=Dict[0];
+	((uint8_t *)&tem)[1]=Dict[1];
+	((uint8_t *)&tem)[2]=Dict[2];
+	((uint8_t *)&tem)[3]=Dict[3];		
+	if(location<tem)
+		{
+			W25QXX_Read(Dict,floatStartDress+location*4,4);
+			((uint8_t *)&num)[0]=Dict[0];
+			((uint8_t *)&num)[1]=Dict[1];
+			((uint8_t *)&num)[2]=Dict[2];
+			((uint8_t *)&num)[3]=Dict[3];
+		}
+		return num;
+}
+
+double W25QXX_Data_doubleRead(uint32_t location)
+{
+	uint8_t Dict[8];
+	double num;
+	uint32_t tem;
+	W25QXX_Read(Dict,20,4);
+	((uint8_t *)&tem)[0]=Dict[0];
+	((uint8_t *)&tem)[1]=Dict[1];
+	((uint8_t *)&tem)[2]=Dict[2];
+	((uint8_t *)&tem)[3]=Dict[3];		
+	if(location<tem)
+		{
+			W25QXX_Read(Dict,doubleStartDress+location*8,8);
+			((uint8_t *)&num)[0]=Dict[0];
+			((uint8_t *)&num)[1]=Dict[1];
+			((uint8_t *)&num)[2]=Dict[2];
+			((uint8_t *)&num)[3]=Dict[3];
+			((uint8_t *)&num)[4]=Dict[4];
+			((uint8_t *)&num)[5]=Dict[5];
+			((uint8_t *)&num)[6]=Dict[6];
+			((uint8_t *)&num)[7]=Dict[7];
+		}
+		return num;
+}
+
+char W25QXX_Data_charRead(uint32_t location)
+{
+	uint8_t Dict[4];
+	char num;
+	uint32_t tem;
+	W25QXX_Read(Dict,24,4);
+	((uint8_t *)&tem)[0]=Dict[0];
+	((uint8_t *)&tem)[1]=Dict[1];
+	((uint8_t *)&tem)[2]=Dict[2];
+	((uint8_t *)&tem)[3]=Dict[3];		
+	if(location<tem)
+		{
+			W25QXX_Read(Dict,charStartDress+location,1);
+			((uint8_t *)&num)[0]=Dict[0];
+		}
+		return num;
+}
+
+void W25QXX_Data_Fixu8(uint32_t location,uint8_t Data)
+{
+	uint8_t temData[1];
+	if((location+u8StartDress)<u8EndDress)
+		{
+			temData[0]=((uint8_t *)&Data)[0];
+			W25QXX_Write(temData,u8StartDress+location,1);
+		}
+}
+
+void W25QXX_Data_Fixu16(uint32_t location,uint16_t Data)
+{
+	uint8_t temData[2];	
+	if((location*2+u16StartDress)<u16EndDress)
+		{
+			temData[0]=((uint8_t *)&Data)[0];
+			temData[1]=((uint8_t *)&Data)[1];
+			W25QXX_Write(temData,u16StartDress+location,2);
+		}
+}
+
+void W25QXX_Data_Fixu32(uint32_t location,uint32_t Data)
+{
+	uint8_t temData[4];
+	if((location*4+u32StartDress)<u32EndDress)
+		{
+			temData[0]=((uint8_t *)&Data)[0];
+			temData[1]=((uint8_t *)&Data)[1];
+			temData[2]=((uint8_t *)&Data)[2];
+			temData[3]=((uint8_t *)&Data)[3];
+			W25QXX_Write(temData,u32StartDress+location,4);
+		}
+}
+
+void W25QXX_Data_Fixint(uint32_t location,int Data)
+{
+	uint8_t temData[4];
+	if((location*4+intStartDress)<intEndDress)
+		{
+			temData[0]=((uint8_t *)&Data)[0];
+			temData[1]=((uint8_t *)&Data)[1];
+			temData[2]=((uint8_t *)&Data)[2];
+			temData[3]=((uint8_t *)&Data)[3];
+			W25QXX_Write(temData,u32StartDress+location,4);
+		}
+}
+
+void W25QXX_Data_Fixfloat(uint32_t location,float Data)
+{
+	uint8_t temData[4];
+	if((location*4+floatStartDress)<floatEndDress)
+		{
+			temData[0]=((uint8_t *)&Data)[0];
+			temData[1]=((uint8_t *)&Data)[1];
+			temData[2]=((uint8_t *)&Data)[2];
+			temData[3]=((uint8_t *)&Data)[3];
+			W25QXX_Write(temData,floatStartDress+location,4);
+		}
+}
+
+void W25QXX_Data_Fixdlobule(uint32_t location,double Data)
+{
+	uint8_t temData[8];
+	if((location*4+doubleStartDress)<doubleEndDress)
+		{
+			temData[0]=((uint8_t *)&Data)[0];
+			temData[1]=((uint8_t *)&Data)[1];
+			temData[2]=((uint8_t *)&Data)[2];
+			temData[3]=((uint8_t *)&Data)[3];
+			temData[4]=((uint8_t *)&Data)[4];
+			temData[5]=((uint8_t *)&Data)[5];
+			temData[6]=((uint8_t *)&Data)[6];
+			temData[7]=((uint8_t *)&Data)[7];
+			W25QXX_Write(temData,doubleStartDress+location,8);
+		}
+}
+
+void W25QXX_Data_Fixchar(uint32_t location,char Data)
+{
+	uint8_t temData[1];
+	if((location*4+charStartDress)<charEndDress)
+		{
+			temData[0]=((uint8_t *)&Data)[0];
+			W25QXX_Write(temData,charStartDress+location,1);
+		}
+}

@@ -1,6 +1,6 @@
 Dependencies for Project 'MyProject', Target 'MyProject': (DO NOT MODIFY !)
 F (startup_stm32f407xx.s)(0x5E2A6EC5)(--cpu Cortex-M4.fp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_MyProject-ID:\STM32\MDK527\PACK\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\STM32\MDK527\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include--pd "__UVISION_VERSION SETA 527" --pd "_RTE_ SETA 1" --pd "STM32F407xx SETA 1"--list startup_stm32f407xx.lst --xref -o myproject\startup_stm32f407xx.o --depend myproject\startup_stm32f407xx.d)
-F (../Src/main.c)(0x5E2EC072)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\MyHardware\Inc-I.\RTE\_MyProject-ID:\STM32\MDK527\PACK\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\STM32\MDK527\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx-o myproject\main.o --omf_browse myproject\main.crf --depend myproject\main.d)
+F (../Src/main.c)(0x5E315D88)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\MyHardware\Inc-I.\RTE\_MyProject-ID:\STM32\MDK527\PACK\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\STM32\MDK527\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx-o myproject\main.o --omf_browse myproject\main.crf --depend myproject\main.d)
 I (../Inc/main.h)(0x5E2EBE35)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x5E1DA977)
 I (../Inc/stm32f4xx_hal_conf.h)(0x5E2EBE35)
@@ -34,8 +34,8 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x5E1DA977)
 I (../Inc/spi.h)(0x5E2EBE34)
 I (../Inc/usart.h)(0x5E2EBE34)
 I (../Inc/gpio.h)(0x5E2EBE33)
-I (..\MyHardware\Inc\w25qxx.h)(0x5E2EBDAE)
-F (../Src/gpio.c)(0x5E2EBE33)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\MyHardware\Inc-I.\RTE\_MyProject-ID:\STM32\MDK527\PACK\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\STM32\MDK527\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx-o myproject\gpio.o --omf_browse myproject\gpio.crf --depend myproject\gpio.d)
+I (..\MyHardware\Inc\w25qxx.h)(0x5E315D12)
+F (../Src/gpio.c)(0x5E2FCAC7)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\MyHardware\Inc-I.\RTE\_MyProject-ID:\STM32\MDK527\PACK\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\STM32\MDK527\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx-o myproject\gpio.o --omf_browse myproject\gpio.crf --depend myproject\gpio.d)
 I (../Inc/gpio.h)(0x5E2EBE33)
 I (../Inc/main.h)(0x5E2EBE35)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x5E1DA977)
@@ -734,8 +734,8 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h)(0x5E1DA977)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x5E1DA977)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h)(0x5E1DA977)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x5E1DA977)
-F (..\MyHardware\Src\w25qxx.c)(0x5E2EBEAC)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\MyHardware\Inc-I.\RTE\_MyProject-ID:\STM32\MDK527\PACK\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\STM32\MDK527\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx-o myproject\w25qxx.o --omf_browse myproject\w25qxx.crf --depend myproject\w25qxx.d)
-I (..\MyHardware\Inc\w25qxx.h)(0x5E2EBDAE)
+F (..\MyHardware\Src\w25qxx.c)(0x5E315D22)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ..\MyHardware\Inc-I.\RTE\_MyProject-ID:\STM32\MDK527\PACK\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\STM32\MDK527\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="527" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx-o myproject\w25qxx.o --omf_browse myproject\w25qxx.crf --depend myproject\w25qxx.d)
+I (..\MyHardware\Inc\w25qxx.h)(0x5E315D12)
 I (../Inc/usart.h)(0x5E2EBE34)
 I (../Inc/main.h)(0x5E2EBE35)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x5E1DA977)

@@ -5,7 +5,7 @@
 <h2>Tool Versions:</h2>
 IDE-Version: ¦ÌVision V5.27.1.0
 Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: Chen Persai, Intel, LIC=----
+License Information: Chen Persai, Intel, LIC=03CTG-VP0EF-M9ZGG-VAIYJ-K9DMX-J0GUT
  
 Tool Versions:
 Toolchain:       MDK-ARM Plus  Version: 5.27.1.0
@@ -28,10 +28,15 @@ Project File Date:  01/27/2020
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\STM32\MDK527\ARM\ARMCC\Bin'
 Build target 'MyProject'
 compiling main.c...
+../Src/main.c(78): warning:  #550-D: variable "FLASH_SIZE"  was set but never used
+  	uint32_t FLASH_SIZE; 
+../Src/main.c(79): warning:  #177-D: variable "datatemp"  was declared but never referenced
+  	uint8_t datatemp[25];
+../Src/main.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=6820 RO-data=476 RW-data=20 ZI-data=5324  
+Program Size: Code=6904 RO-data=448 RW-data=24 ZI-data=5328  
 FromELF: creating hex file...
-"MyProject\MyProject.axf" - 0 Error(s), 0 Warning(s).
+"MyProject\MyProject.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
